@@ -21,7 +21,7 @@ def get_embedding(entry, model="text-embedding-ada-002"):
 
 @app.route("/")
 def test_func():
-    return MONGO_PWD
+    return "hello world, updated"
 
 #pn is phone number
 @app.route("/getToday/<int:pn>", methods=['GET'])
@@ -57,7 +57,6 @@ def post_entry():
         "dateTime" : date_time,
         "phoneNumber" : phone_no,
         "entry" : entry,
-        "embedding": get_embedding(entry)
     }
     result = col.insert_one(fixed)
     return f"Inserted document ID: {result.inserted_id}"

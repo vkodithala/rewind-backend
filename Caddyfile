@@ -1,0 +1,7 @@
+www.vd.varoonkodithala.com {
+    redir https://vd.varoonkodithala.com{uri}
+} 
+
+vd.varoonkodithala.com {
+    reverse_proxy localhost:8000
+}

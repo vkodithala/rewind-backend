@@ -7,10 +7,10 @@ from datetime import datetime, date
 
 app = Flask(__name__)
 
-# openai.api_key = "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"
-load_dotenv()
-MONGO_PWD = os.getenv("MONGO_PWD")
-uri = f"mongodb+srv://admin:{ MONGO_PWD }@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
+# # openai.api_key = "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"
+# load_dotenv()
+# MONGO_PWD = os.getenv("MONGO_PWD")
+uri = "mongodb+srv://admin:Rewind1234!@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]
 col = db["Test"]

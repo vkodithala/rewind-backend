@@ -3,12 +3,11 @@ from pymongo import MongoClient
 import json, sys, certifi, openai
 from typing import List
 from datetime import datetime, date
-from dotenv import dotenv_values
 
 app = Flask(__name__)
 
-mongo_pwd = dotenv_values()["MONGO_PWD"]
-uri = f"mongodb+srv://admin:{ mongo_pwd }@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
+openai.api_key = "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"
+uri = "mongodb+srv://admin:Rewind1234!@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]
 col = db["Test"]

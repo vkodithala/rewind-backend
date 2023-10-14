@@ -1,3 +1,3 @@
-http://3.139.235.18 {
+http://18.116.45.192 {
     reverse_proxy localhost:8000
 }

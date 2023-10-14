@@ -17,4 +17,8 @@ default_json = {
 def index():
     journal_entry = default_json["entry"]
     entry_embedding = get_embedding(journal_entry, engine="text-embedding-ada-002")
-    return '<h1>f"{entry_embedding}"<h1>'
+    return "hello world 2"
+
+@app.route('/test')
+def test():
+    return "text"

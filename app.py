@@ -6,7 +6,7 @@ from datetime import datetime, date
 
 app = Flask(__name__)
 
-openai.api_key = "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"
+openai.api_key = "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"
 uri = "mongodb+srv://admin:Rewind1234!@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]

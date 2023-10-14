@@ -11,6 +11,10 @@ client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]
 col = db["Test"]
 
+@app.route("/")
+def test_func():
+    return "hello world"
+
 #pn is phone number
 @app.route("/getToday/<int:pn>", methods=['GET'])
 def get_today(pn):
@@ -48,6 +52,21 @@ def post_entry():
     result = col.insert_one(fixed)
     return f"Inserted document ID: {result.inserted_id}"
 
+@app.route("/getMonth/<int:pn>", methods=['GET'])
+def get_month(pn):
+    today = str(datetime.now())
+    pattern = today[0:7]
+
+    query = {
+        "phoneNumber" : pn,
+        "dateTime": {"$regex": pattern}
+    }
+    cursor = col.find(query)
+    document_list = [doc for doc in cursor]
+    json_data = json.dumps(document_list, default=str, indent=2)
+    print(len(document_list))
+    return json_data
+
 # # def parse_payload(s: str) -> []:
 # #     ret = []
 # #     if(len(s) > 21):
@@ -59,20 +78,6 @@ def post_entry():
 # #         ret.append(phone_no)
 # #         ret.append(message)
 # #     return ret
-
-# @app.route("/getMonth/<int:pn>", methods=['GET'])
-# def get_month(pn):
-#     today = str(datetime.now())
-#     pattern = today[0:10]
-
-#     query = {
-#         "phoneNumber" : pn,
-#         "dateTime": {"$regex": pattern}
-#     }
-#     cursor = col.find(query)
-#     document_list = [doc for doc in cursor]
-#     json_data = json.dumps(document_list, default=str, indent=2)
-#     return json_data
 
 
 # # @app.route("/getPast7/<int:pn>", methods=['GET'])

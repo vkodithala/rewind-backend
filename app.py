@@ -1,13 +1,16 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
-import json, sys, certifi, openai
+from dotenv import load_dotenv
+import json, sys, certifi, openai, os
 from typing import List
 from datetime import datetime, date
 
 app = Flask(__name__)
 
-openai.api_key = "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"
-uri = "mongodb+srv://admin:Rewind1234!@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
+# openai.api_key = "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"
+load_dotenv()
+MONGO_PWD = os.getenv("MONGO_PWD")
+uri = f"mongodb+srv://admin:{ MONGO_PWD }@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]
 col = db["Test"]
@@ -54,7 +57,7 @@ def post_entry():
         "dateTime" : date_time,
         "phoneNumber" : phone_no,
         "entry" : entry,
-        # "embedding": get_embedding(entry)
+        "embedding": get_embedding(entry)
     }
     result = col.insert_one(fixed)
     return f"Inserted document ID: {result.inserted_id}"

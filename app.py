@@ -21,7 +21,7 @@ def get_embedding(entry, model="text-embedding-ada-002"):
 
 @app.route("/")
 def test_func():
-    return "hello world"
+    return MONGO_PWD
 
 #pn is phone number
 @app.route("/getToday/<int:pn>", methods=['GET'])

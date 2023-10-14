@@ -1,15 +1,21 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
-import json, sys
-import certifi
+import json, sys, certifi, openai
+from typing import List
 from datetime import datetime, date
+from dotenv import dotenv_values
 
 app = Flask(__name__)
 
-uri = "mongodb+srv://admin:Rewind1234!@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
+mongo_pwd = dotenv_values()["MONGO_PWD"]
+uri = f"mongodb+srv://admin:{ mongo_pwd }@hackathon.otz1cym.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, tlsCAFile=certifi.where())
 db = client["Rewind"]
 col = db["Test"]
+
+def get_embedding(entry, model="text-embedding-ada-002"):
+    entry = entry.replace("\n", " ")
+    return openai.Embedding.create(input = [entry], model=model)['data'][0]['embedding']
 
 @app.route("/")
 def test_func():
@@ -44,10 +50,12 @@ def get_all(pn):
 def post_entry():
     input_string = request.json['payload']
     items = parse_payload(input_string)
+    date_time, phone_no, entry = items
     fixed = {
-        "dateTime" : items[0],
-        "phoneNumber" : items[1],
-        "text" : items[2]
+        "dateTime" : date_time,
+        "phoneNumber" : phone_no,
+        "entry" : entry,
+        "embedding": get_embedding(entry)
     }
     result = col.insert_one(fixed)
     return f"Inserted document ID: {result.inserted_id}"
@@ -67,17 +75,17 @@ def get_month(pn):
     print(len(document_list))
     return json_data
 
-# # def parse_payload(s: str) -> []:
-# #     ret = []
-# #     if(len(s) > 21):
-# #         unix_time = int(s[0:10])
-# #         normal_time = datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
-# #         phone_no = int(s[10:21])
-# #         message = s[21:]
-# #         ret.append(normal_time)
-# #         ret.append(phone_no)
-# #         ret.append(message)
-# #     return ret
+def parse_payload(s: str) -> List:
+    ret = []
+    if(len(s) > 21):
+        unix_time = int(s[0:10])
+        normal_time = datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
+        phone_no = int(s[10:21])
+        message = s[21:]
+        ret.append(normal_time)
+        ret.append(phone_no)
+        ret.append(message)
+    return ret
 
 
 # # @app.route("/getPast7/<int:pn>", methods=['GET'])

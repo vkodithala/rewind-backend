@@ -87,9 +87,6 @@ def parse_payload(s: str) -> List:
         ret.append(message)
     return ret
 
-if __name__ == "__main__":
-    app.run(host="0.0.0", port=5000)
-
 
 # @app.route("/getPast7/<int:pn>", methods=['GET'])
 # def getPast7(pn):
